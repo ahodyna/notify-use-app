@@ -1,6 +1,5 @@
 import { registerAs } from '@nestjs/config';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { User } from '../modules/users/user.entity';
 
 const config = {
   type: 'postgres',
@@ -9,10 +8,10 @@ const config = {
   password: 'obrio_app_password',
   database: 'user_service',
   synchronize: false,
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['src/migrations/*.ts'],
+  entities: ['dist/modules/**/*.entity{.ts,.js}'],
+  migrations: ['dist/migrations/*.js'],
   host: 'localhost',
-  migrationsTableName: 'Migrations',
+  migrationsTableName: 'migrations',
 };
 
 export default registerAs('typeorm', () => config);
