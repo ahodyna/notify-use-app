@@ -1,14 +1,14 @@
 version: "3.8"
 services:
-  postgres_db:
+  obrio_db:
     image: postgres
     container_name: local_pgdb
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: employee_app
-      POSTGRES_PASSWORD: employee_app_password
+      POSTGRES_USER: obrio_app
+      POSTGRES_PASSWORD: obrio_app_password
     volumes:
       - local_pgdata:/var/lib/postgresql/data
   pgadmin:
