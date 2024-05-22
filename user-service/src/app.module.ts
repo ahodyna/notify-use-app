@@ -1,17 +1,15 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeorm from './config/typeorm';
 
-import { TasksService } from './cron/message-service';
+import { CronModule } from './modules/cron/cron.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm],
@@ -22,8 +20,9 @@ import { UsersModule } from './modules/users/users.module';
         configService.get('typeorm'),
     }),
     UsersModule,
+    CronModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TasksService],
+  providers: [AppService],
 })
 export class AppModule {}
