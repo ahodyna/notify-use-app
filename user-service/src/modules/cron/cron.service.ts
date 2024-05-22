@@ -13,6 +13,12 @@ export class TasksService {
     this.logger.debug('Called every 30 seconds');
 
     const users = await this.usersService.getUnnotifiedUsers();
-    this.logger.log(`Unnotified users: ${JSON.stringify(users)}`);
+    if (users.length) {
+      this.logger.log(`Users to notify:  ${JSON.stringify(users)}`);
+      // TODO: send to RabbitMQ
+
+      const userIds = users.map((user) => user.id);
+      await this.usersService.updatedUserNotificationStatus(userIds);
+    }
   }
 }
