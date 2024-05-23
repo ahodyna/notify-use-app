@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository, In } from 'typeorm';
+import { MoreThan, Repository, In } from 'typeorm';
 
 import { Users } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,15 +19,12 @@ export class UsersService {
   }
 
   async getUnnotifiedUsers(): Promise<Users[]> {
-    // TODO: change it after debugging to:
-    //  const 24HoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-    const OneHoursAgo = new Date(Date.now() - 1 * 60 * 60 * 1000);
+    const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-    // TODO: change it after debugging to: MoreThan
     return await this.usersRepository.find({
       where: {
         is_notified: false,
-        created_at: LessThan(OneHoursAgo),
+        created_at: MoreThan(twentyFourHoursAgo),
       },
       select: {
         id: true,
@@ -36,7 +33,7 @@ export class UsersService {
     });
   }
 
-  async updatedUserNotificationStatus(userIds: number[]) {
+  async updateUserNotificationStatus(userIds: number[]) {
     if (!userIds || !userIds.length) return;
     try {
       const usersToUpdate = await this.usersRepository.find({

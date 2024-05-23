@@ -14,8 +14,6 @@ export class TasksService {
 
   @Cron(CronExpression.EVERY_30_SECONDS)
   async handleCron() {
-    this.logger.debug('Called every 30 seconds');
-
     const users = await this.usersService.getUnnotifiedUsers();
     if (users.length) {
       this.logger.log(`Users to notify:  ${JSON.stringify(users)}`);
@@ -23,7 +21,7 @@ export class TasksService {
       this.messageService.send(users);
 
       const userIds = users.map((user) => user.id);
-      await this.usersService.updatedUserNotificationStatus(userIds);
+      await this.usersService.updateUserNotificationStatus(userIds);
     }
   }
 }
