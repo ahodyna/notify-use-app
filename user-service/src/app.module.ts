@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import typeorm from './config/typeorm';
 
+import typeorm from './config/typeorm';
 import { CronModule } from './modules/cron/cron.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
+import { MessageModule } from './modules/message/message.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UsersModule } from './modules/users/users.module';
     }),
     UsersModule,
     CronModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,22 +1,32 @@
 services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
   obrio_db:
     image: postgres
-    container_name: local_pgdb
+    container_name: obrio_postgres
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_DB: postgres
       POSTGRES_USER: obrio_app
       POSTGRES_PASSWORD: obrio_app_password
     volumes:
-      - local_pgdata:/var/lib/postgresql/data
+      - obrio_postgres_volume:/var/lib/postgresql/data
     configs:
       - source: db.initializer.sql
         target: /docker-entrypoint-initdb.d/db.initializer.sql
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin4_container
+    container_name: obrio_pgadmin
     restart: unless-stopped
     ports:
       - "8383:80"
@@ -24,11 +34,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin1@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin1
     volumes:
-      - pgadmin-data:/var/lib/pgadmin
+      - obrio_pgadmin_volume:/var/lib/pgadmin
 
 volumes:
-  local_pgdata:
-  pgadmin-data:
+  obrio_postgres_volume:
+  obrio_pgadmin_volume:
 
 configs:
   db.initializer.sql:
